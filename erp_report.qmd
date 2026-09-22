@@ -40,6 +40,8 @@ PROCESSED_PATH = Path("data/processed")
 Provide an introduction to the ERP component of your choice here. This should include a brief literature review -- see report instructions for details.
 Use appropriate subheadings as required: adapt the ones below, create new ones or delete as needed.
 
+Hello, hello, hello
+
 ### Intro subheading 1
 
 ### Intro subheading 2
@@ -103,7 +105,7 @@ REJECT = {
 ### Preprocessing
 
 ```{python}
-#| eval: true # set this to false if you don't want preprocessing to recompute
+#| eval: false # set this to false if you don't want preprocessing to recompute
 #| output: false # this suppresses any output
 
 for raw_file in RAW_PATH.glob("*_raw.fif.gz"):
