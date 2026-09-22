@@ -40,8 +40,6 @@ PROCESSED_PATH = Path("data/processed")
 Provide an introduction to the ERP component of your choice here. This should include a brief literature review -- see report instructions for details.
 Use appropriate subheadings as required: adapt the ones below, create new ones or delete as needed.
 
-Hello, hello, hello
-
 ### Intro subheading 1
 
 ### Intro subheading 2
