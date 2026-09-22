@@ -103,7 +103,7 @@ REJECT = {
 ### Preprocessing
 
 ```{python}
-#| eval: false # set this to false if you don't want preprocessing to recompute
+#| eval: true # set this to false if you don't want preprocessing to recompute
 #| output: false # this suppresses any output
 
 for raw_file in RAW_PATH.glob("*_raw.fif.gz"):
