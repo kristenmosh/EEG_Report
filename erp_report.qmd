@@ -1,6 +1,6 @@
 ---
 title: "ERP analysis report (customise title to fit your topic)"
-author: "Your name"
+author: "Kristen Mosheev"
 date: today
 format: 
     html:
@@ -37,12 +37,22 @@ PROCESSED_PATH = Path("data/processed")
 
 ## Introduction
 
-Provide an introduction to the ERP component of your choice here. This should include a brief literature review -- see report instructions for details.
-Use appropriate subheadings as required: adapt the ones below, create new ones or delete as needed.
+### N170 Component Characteristics
+The polarity of the N170 ERP is negative, displaying a voltage peak at a latency of approximately 170ms post-stimulus onset (Gao et al., 2019). The most topographically active areas when the N170 is elicited are the bilateral occipito-temporal areas, specifically, electrodes P7, P8, PO7 and PO8 with a standard 10-20 system (Johnston et al., 2015; Navajas et al., 2013). 
 
-### Intro subheading 1
+### Background Research on the N170 Component
+#### Initial Observations of the N170
+The N170 was first officially observed by Bentin et al. (1996), utilising electrodes to study facial perception. Bentin et al. (1996) found that pictures of a human face elicited an N170 at approximately 172ms, located most prominently over the posterior temporal scalp and displayed greater prominence over the right hemisphere. Bentin et al. (1996) found that distorted faces displayed the same N170 amplitude and latency as normal faces, while inverted faces produced the same amplitude for the N170 as upright faces, despite a slight time delay. Interestingly, Bentin et al. (1996) found that sole depiction of human eyes elicited an N170 of greater amplitude compared to display of the whole face, while depiction of the nose and lips displayed a 50ms delay of the N170, alongside a decreased amplitude than that of the whole face. A distinct difference is that the N170 was not elicited by animal’s faces, human hands or inanimate objects, positing that the N170 may reflect the brain’s recognition of human faces, and specifically, eye recognition (Bentin et al., 1996).
 
-### Intro subheading 2
+Despite the first formal publication of the N170 from Bentin et al. (1996), Bötzel & Grüsser (1989) observed the first findings related to facial perceptions through a component now known as the Vertex Positive Potential (VPP). Bötzel & Grüsser (1989) observed the VPP after displaying human faces amongst control objects such as chairs and trees. The VPP occurred at electrode Cz between 150ms to 200ms post-stimulus onset of the visual display of human faces. Through use of a larger number of electrodes, Bötzel et al. (1995) found that the VPP was a direct three-dimensional correspondent to the N170 found at the occipito-temporal sites. Finally, Bötzel et al. (1995) undertook advanced computer analysis of dipoles, finding that the electrical signals originated deep in the temporal cortex, crossing the visual cortex and centre of the scalp. Prior to Bötzel & Grüsser’s (1989) use of electroencephalography (EEG) to understand human facial processing, researchers largely relied on animal studies and research with prosopagnosia patients. Thus, the works of Bötzel & Grüsser (1989) mark important methodological advances in understanding the processes behind human facial processing.
+
+#### Conditions where the N170 Component is elicited
+The classic visual stimuli utilised to elicit the N170 ERP component is human facial stimuli (Eimer, 2011). Inverted human faces have also elicited the N170 component, however, with an increased amplitude and delayed deflection compared to visual display of an upright human face (Civile et al., 2018). Different human facial expressions, such as fear, have also been seen to inflate the negative amplitude of the N170 response (Blau et al., 2007). While human facial features elicit the N170, the eyes elicit a larger amplitude of the N170 compared to a whole upright human face, alongside delayed latency than that of features such as the nose and mouth. 
+
+The N170 ERP component is particularly sensitive to facial visual stimuli but can also be elicited by written words (Eimer, 2011; Maurer et al., 2005). 
+
+#### Functional Significance of the N170 Component
+The Face Perception Paradigm is an electroencephalographic experiment utilised to evoke an N170 ERP component (Yildirim-Keles et al., 2025). The N170 is a functionally significant ERP component that is thought to represent visual facial detection and encoding in a gestalt manner (Olivares et al., 2015). The N170 ERP is generally evoked by presenting participants with visual stimuli of faces amongst visual stimuli of objects, providing a relative ‘baseline’ between facial and non-facial visual stimuli (Rossion, 2014).
 
 ## Methods
 
@@ -51,6 +61,11 @@ Complete the following subsections using the information from @kappenman2021. Do
 ### Participants
 
 Provide information on the number of participants and their demographics (sex, age, handedness) as well as the inclusion criteria for the study.
+The new number of participants - 13 male, 24 female, average age 21.5 years, SD=7.78 Range 18-30, 35-right handed.
+
+```{python}
+EXCLUDE = ["001", "003", "004", "005", "016"]
+```
 
 ### Procedure
 
@@ -76,7 +91,7 @@ FILTER_SETTINGS = {
 
 # This setting re-references to averaged mastoids (P9/P10 as proxy) 
 # To use an average reference, replace ["P9", "P10"] with None 
-REFERENCE = ["P9","P10"]
+REFERENCE = None
 
 ```
 
@@ -84,12 +99,12 @@ REFERENCE = ["P9","P10"]
 
 ```{python}
 TMIN = -0.2 # epoch start relative to critical event
-TMAX = 1.0  # epoch end relative to critical event
+TMAX = 0.8  # epoch end relative to critical event
 
 BASELINE = (-0.2,0) # baseline interval
 
 # critical conditions for averaging and epoching
-CONDITIONS = ["stimulus/compatible", "stimulus/incompatible"]
+CONDITIONS = ["stimulus/face", "stimulus/car", "stimulus/scrambled_face", "stimulus/scrambled_car"]
 
 REJECT = {
     "eeg": 150e-6,
@@ -138,6 +153,12 @@ for cond in CONDITIONS:
     ss_avs[cond] = []
 
 for processed_file in PROCESSED_PATH.glob("*_raw.fif.gz"):
+
+    subj_ID = processed_file.stem.split("_")[0]
+    print(f"processing participant {subj_ID}")
+
+    if subj_ID in EXCLUDE:
+        continue
     
     # read in preprocessed file
     processed = SimpleRaw(processed_file)
@@ -196,4 +217,16 @@ What did you learn by applying the analysis process to a new dataset?
 ## References
 
 *Note: this document is set up to automatically generate a reference list via a bib file. We will look at how to do this in the week 9 workshop.*
+Bentin, S., Allison, T., Puce, A., Perez, E., & McCarthy, G. (1996). Electrophysiological Studies of Face Perception in Humans. Journal of Cognitive Neuroscience, 8(6), 551–565. https://doi.org/10.1162/jocn.1996.8.6.551
+Blau, V. C., Maurer, U., Tottenham, N., & McCandliss, B. D. (2007). The face-specific N170 component is modulated by emotional facial expression. Behavioral and Brain Functions, 3(1), 7. https://doi.org/10.1186/1744-9081-3-7
+Civile, C., Elchlepp, H., McLaren, R., Galang, C. M., Lavric, A., & McLaren, I. (2018). The effect of scrambling upright and inverted faces on the N170. Quarterly Journal of Experimental Psychology, 71(11), 2464–2476. https://doi.org/10.1177/1747021817744455
+Eimer, M. (2011). The face-sensitivity of the N170 component. Frontiers in Human Neuroscience, 5. https://doi.org/10.3389/fnhum.2011.00119
+Gao, C., Conte, S., Richards, J. E., Xie, W., & Hanayik, T. (2019). The neural sources of N170: Understanding timing of activation in face-selective areas. Psychophysiology, 56(6), Article e13336. https://doi.org/10.1111/psyp.13336
+Johnston, P., Molyneux, R., & Young, A. W. (2015). The N170 observed “in the wild”: robust event-related potentials to faces in cluttered dynamic visual scenes. Social Cognitive and Affective Neuroscience, 10(7), 938–944. https://doi.org/10.1093/scan/nsu136
+Maurer, U., Brandeis, D., & McCandliss, B. D. (2005). Fast, visual specialization for reading in English revealed by the topography of the N170 ERP response. Behavioral and Brain Functions: BBF, 1(13). https://doi.org/10.1186/1744-9081-1-13
+Navajas, J., Ahmadi, M., & Quian Quiroga, R. (2013). Uncovering the mechanisms of conscious face perception: A single-trial study of the N170 responses. Journal of Neuroscience, 33(4), 1337–1343. https://doi.org/10.1523/jneurosci.1226-12.2013
+Olivares, E. I., Iglesias, J., Saavedra, C., Trujillo-Barreto, N. J., & Valdés-Sosa, M. (2015). Brain signals of face processing as revealed by event-related potentials. Behavioural Neurology, 2015, Article 514361. https://doi.org/10.1155/2015/514361
+Rossion, B. (2014). Understanding face perception by means of human electrophysiology. Trends in Cognitive Sciences, 18(6), 310–318. https://doi.org/10.1016/j.tics.2014.02.013
+Yildirim-Keles, F. Z., Stacchi, L., & Caldara, R. (2025). Cross-validating the electrophysiological markers of early face categorization. Eneuro, 12(1), Article e031724. https://doi.org/10.1523/eneuro.0317-24.2024
 
+I declare AI was not used for this assignment
