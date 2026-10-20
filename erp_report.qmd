@@ -54,30 +54,25 @@ The Face Perception Paradigm utilises EEG experimentation to evoke an N170 compo
 
 ## Methods
 
-Complete the following subsections using the information from @kappenman2021. Don't forget to mention that the data are from the ERP CORE resource under a Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). 
-
 ### Participants
-Initially, a total of 40 participants were recruited for the current study. This sample contained 25 females and 15 males, with an average age of 21.5 years and a standard deviation of 2.87 years. The range of ages was 18 to 30 and 38 participants were right handed. All participants are neurotypical. However, results from three participants were excluded due to artifact rejection. Therefore, results were analysed from 37 participants. The new sample contained 24 females and 13 males, with an average age of 21.5 years and a standard deviation of 2.96 years. The age range of participants was 18 to 30 years and 35 participants were right-handed. 
-
-***as well as the inclusion criteria for the study.
-
+Initially, a total of 40 participants were recruited for the current study. This sample contained 25 females and 15 males, with an average age of 21.5 years and a standard deviation of 2.87 years. The range of ages was 18 to 30 and 38 participants were right handed. All participants are neurotypical. However, results from three participants were excluded due to artifact rejection. Therefore, results were analysed from 37 participants. The new sample contained 24 females and 13 males, with an average age of 21.5 years and a standard deviation of 2.96 years. The age range of participants was 18 to 30 years and 35 participants were right-handed. Inclusion criteria included native English speaking competence, normal colour perception, normal or corrected-to-normal vision and no history of a neurological disease or injury. Each participant provided a self-report regarding the inclusion criteria.
 
 ```{python}
-EXCLUDE = ["001", "003", "004", "005", "016"]
+EXCLUDE = ["001", "005", "016"]
 ```
 
 ### Procedure
 
-Describe the task that participants completed. This should be tailored to the task / component that you chose to analyse.
+A face perception task was undertaken with participants to elicit the N170 component. The incorporated visual stimuli of faces, cars, scrambled faces and scrambled cars were obtained from Rossion & Caharel (2011) and contained 40 exemplar visual stimuli in each category. For each trial, one stimuli from the four aforementioned visual categories was randomly displayed in the centre of a screen for 300ms. The visual angle of every image was 3.32° x 3.78°, while the inter-stimulus-interval was 1100-1300ms and displayed a fixation point. Clothing, hair and the background were all excluded from the face stimuli, while a background was omitted for the car stimuli. The scrambled faces and cars were phase-randomized based on the facial and car visual stimuli. Participants wre provided two button alternatives which were used to indicate whether the participant was observing an object (face or car) or a texture (scrambled face or scrambled car) for each trial. A total of 320 trials were undertaken for each participant, where the 40 visual stimuli from each category were displayed twice, forming a total of 80 trials for each stimulus category. Each stimuli was randomly presented through a shuffled-sequence, however, each exemplar was only presented once during the first half of the experiment and once during the second half of the experiment. The experiment was conducted in segments of 40 trials. 
 
 ### EEG recording
 
-Describe the EEG recording parameters: amplifier and type of cap used, electrode positions, CMS / DRL electrode positions, EOG electrode positions, and filter parameters.
+EEG recordings were conducted with a Biosemi ActiveTwo recording system with active electrodes and the amplifier built into the hardware (Biosemi, B. V., Amsterdam, the Netherlands). An elastic cap was utilised, with 30 attached scalp electrodes that were positioned relative to the 10/20 system:
+FP1, F3, F7, FC3, C3, C5, P3, P7, P9, PO7, PO3, O1, Oz, Pz, CPz, FP2, Fz, F4, F8, FC4, FCz, Cz, C4, C6, P4, P8, P10, PO8, PO4, O2. The common mode sense (CMS) was positioned at PO1, while the driven right leg (DRL) was positioned at PO2. The horizontal electrooculogram (HEOG) was positioned with electrodes laterla to the external canthus of each eye, while the vertical electrooculogram was positioned with an electrode below the right eye. A low pass filter was implemented utilising a fifth order sinc filter and a half power cutoff at 204.8Hz. This frequency was then digitized with 24 bits resolution as 1024Hz.
 
 ### Analysis parameters
 
-Choose these parameters appropriate for the component that you are analysing. Use those recommended by @kappenman2021; see their Table 1. This holds for all parameters except for the filter parameters; for these, you can stick to the example parameters provided below.
-Describe the parameters in this section and also modify the code accordingly
+The N170 was stimulus-locked to the visual stimuli. The epochs were taken from -200ms to 800ms around stimulus onset. The baseline period was measured from -200ms to 0ms. The electrode site for the N170 was PO8. All data and procedural actions were obtained from the ERP CORE resource (Kappenman et al., 2021) under a Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). 
 
 #### Preprocessing parameters
 
@@ -192,15 +187,13 @@ for cond in CONDITIONS:
 
 ### Grand average: expected effect
 
-Plot the electrode deemed most representative for the effect by @kappenman2021.
 Set the parameters for the specified analysis window, which will include dotted vertical lines marking the analysis window on the plot.
-Note: for some components, @kappenman2021 refer to two electrode sites. If this is the case for your chosen component, the analysis requires a consideration of lateralisation; please make an appointment to discuss the required analysis tweaks with Ina.
 
 ```{python}
-selected_electrode = "FCz"
-plot_title = "Grand average for N2: Incompatible versus compatible Flanker stimuli"
-analysis_window_start = 0.2
-analysis_window_end = 0.4
+selected_electrode = "PO8"
+plot_title = "Grand average for N170: Faces versus Cars"
+analysis_window_start = 0.11
+analysis_window_end = 0.15
 
 plot_evokeds(grand_avs, picks = selected_electrode, invert_y = True, title = plot_title, vlines = [analysis_window_start, analysis_window_end])
 
@@ -230,5 +223,8 @@ Yildirim-Keles, F. Z., Stacchi, L., & Caldara, R. (2025). Cross-validating the e
 Taubert, J., Wardle, S. G., & Ungerleider, L. G. (2020). What does a “face cell” want?” Progress in Neurobiology, 195, 101880. PubMed Central. https://doi.org/10.1016/j.pneurobio.2020.101880
 Albonico, A., & Barton, J. (2019). Progress in perceptual research: The case of prosopagnosia. F1000Research, 8(1), 765. https://doi.org/10.12688/f1000research.18492.1
 ohnston, P., Molyneux, R., & Young, A. W. (2015). The N170 observed “in the wild”: Robust event-related potentials to faces in cluttered dynamic visual scenes. Social Cognitive and Affective Neuroscience, 10(7), 938–944. PubMed Central. https://doi.org/10.1093/scan/nsu136
+Rossion, B., & Caharel, S. (2011). ERP evidence for the speed of face categorization in the human brain: Disentangling the contribution of low-level visual cues from face perception. Vision Research, 51(12), 1297–1311. PubMed. https://doi.org/10.1016/j.visres.2011.04.003
+Biosemi EEG ECG EMG BSPM neuro amplifier electrodes. (n.d.). Www.Biosemi.Com. Retrieved October 20, 2026, from https://www.biosemi.com/
+Kappenman, E. S., Farrens, J. L., Zhang, W., Stewart, A. X., & Luck, S. J. (2021). ERP CORE: An open resource for human event-related potential research. NeuroImage, 225, 117465. https://doi.org/10.1016/j.neuroimage.2020.117465
 
 I declare AI was not used for this assignment
