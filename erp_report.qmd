@@ -52,6 +52,11 @@ The classic visual stimuli utilised to elicit the N170 ERP component is human fa
 #### Functional Significance of the N170 Component
 The Face Perception Paradigm utilises EEG experimentation to evoke an N170 component (Yildirim-Keles et al., 2025). The N170 is thought to represent visual facial detection and encoding in a gestalt manner (Olivares et al., 2015). The N170 ERP is generally evoked by presenting participants with visual stimuli of faces amongst visual stimuli of objects, providing a relative ‘baseline’ between facial and non-facial visual stimuli (Rossion, 2014). Furthermore, the N170 can be applied clinically as a quantitative biomarker for autistic spectrum disorder, schizophrenia and developmental prosopagnosia, as such conditions display an uncharacteristic N170 component (Johnston et al., 2015).
 
+### Controversies regarding the N170
+Due to the relatively new use of EEG for facial perception studies  (Bentin et al., 1996), there is some controvery over what the N170 truly reflects. A topic that is strongly debated at current is whether the N170 reflects face-specificty. Rossion et al. (2000) propose that there may be face-specific processes in areas of the brain, such as the fusiform gyrus, while a greater number of works posit that such areas may better reflect stimuli processing from an expert of perception within this field (Carmel & Bentin, 2002; Dering et al., 2012). However, Ganis et al. (2012) promotes a sensible view of the reflections of the N170: this ERP component responds favourably to face and face-like stimuli compared to other categories of stimuli such as objects, and scrambled pictures. 
+
+Sagehorn et al. (2023) presents another interesting debate regarding the N170, finding that the N170 lost discrimination power of faces when participants viewed visual stimuli through virtual reality (VR), as opposed to the traditional 2D display of the visual stimuli. Such conclusions present the possibility that results of the N170 from 2D visual representations may not applicable to VR visual stimuli, and further, applications to processing of real-life faces.
+
 ## Methods
 
 ### Participants
@@ -187,13 +192,11 @@ for cond in CONDITIONS:
 
 ### Grand average: expected effect
 
-Set the parameters for the specified analysis window, which will include dotted vertical lines marking the analysis window on the plot.
-
 ```{python}
 selected_electrode = "PO8"
-plot_title = "Grand average for N170: Faces versus Cars"
-analysis_window_start = 0.11
-analysis_window_end = 0.15
+plot_title = "Grand average for N170: Faces versus Cars versus Scrambled Faces versus Scrambled Cars"
+analysis_window_start = 0.13
+analysis_window_end = 0.2
 
 plot_evokeds(grand_avs, picks = selected_electrode, invert_y = True, title = plot_title, vlines = [analysis_window_start, analysis_window_end])
 
@@ -202,29 +205,38 @@ plot_evokeds(grand_avs, picks = selected_electrode, invert_y = True, title = plo
 
 ## Discussion and reflection
 
-Provide a brief discussion of the effect that you observed. Were you able to replicate the ERP component as observed by @kappenman2021? If not, what was different in your grand average ERP? 
+The expected experimental effects for the N170 grand average are observed. Each condition displays a P100 situated approximately around the 100ms interval, reflecting initial visual processing of each stimuli category (Herzberg et al., 2025).The N170 is observed with a shorter latency and increased amplitude for the facial condition compared to the car condition. The scrambled face and scrambled car stimuli depict similar amplitudes at approx 170ms, and do not reach closely to the amplitude of the unscrambled visual conditions. This could be due to the structural integrity of the concepts being destroyed through phase-scrambling, wherein, face-sensitive neurons do not fire at the same time, decreasing the observed amplitude (Liu et al., 2016).
 
-What did you learn by applying the analysis process to a new dataset?
+By applying the analysis process to the N170 dataset, I feel that I was given a chance to try to understand and integrate the information specific to the N170 dataset on my own. Making mistakes ultimately ended up being the best process for my learning, as I may make a mistake, but getting to go through the process of where I went wrong with Ina really helped me to understand why different parameters and processes practically matter in running the code. I feel that I understood the pipeline process to a greater degree by undertaking a new dataset, as I could flow through each step to understand why certain steps were undertaken before others, and importance of each step to the overall outcome of producing the desired results.
+
+
+ Were you able to replicate the ERP component as observed by @kappenman2021? If not, what was different in your grand average ERP? 
 
 ## References
 
-*Note: this document is set up to automatically generate a reference list via a bib file. We will look at how to do this in the week 9 workshop.*
+Albonico, A., & Barton, J. (2019). Progress in perceptual research: The case of prosopagnosia. F1000Research, 8, 765. https://doi.org/10.12688/f1000research.18492.1
 Bentin, S., Allison, T., Puce, A., Perez, E., & McCarthy, G. (1996). Electrophysiological Studies of Face Perception in Humans. Journal of Cognitive Neuroscience, 8(6), 551–565. https://doi.org/10.1162/jocn.1996.8.6.551
+BioSemi. (2001). BioSemi Products: Active2 / Active2.5 [Computer software]. https://www.biosemi.com/Products_ActiveTwo.htm
 Blau, V. C., Maurer, U., Tottenham, N., & McCandliss, B. D. (2007). The face-specific N170 component is modulated by emotional facial expression. Behavioral and Brain Functions, 3(1), 7. https://doi.org/10.1186/1744-9081-3-7
+Carmel, D., & Bentin, S. (2002). Domain specificity versus expertise: factors influ-encing distinct processing of faces. Cognition, 83, 1-29.
 Civile, C., Elchlepp, H., McLaren, R., Galang, C. M., Lavric, A., & McLaren, I. (2018). The effect of scrambling upright and inverted faces on the N170. Quarterly Journal of Experimental Psychology, 71(11), 2464–2476. https://doi.org/10.1177/1747021817744455
-Eimer, M. (2011). The face-sensitivity of the N170 component. Frontiers in Human Neuroscience, 5. https://doi.org/10.3389/fnhum.2011.00119
-Gao, C., Conte, S., Richards, J. E., Xie, W., & Hanayik, T. (2019). The neural sources of N170: Understanding timing of activation in face-selective areas. Psychophysiology, 56(6), Article e13336. https://doi.org/10.1111/psyp.13336
-Johnston, P., Molyneux, R., & Young, A. W. (2015). The N170 observed “in the wild”: robust event-related potentials to faces in cluttered dynamic visual scenes. Social Cognitive and Affective Neuroscience, 10(7), 938–944. https://doi.org/10.1093/scan/nsu136
-Maurer, U., Brandeis, D., & McCandliss, B. D. (2005). Fast, visual specialization for reading in English revealed by the topography of the N170 ERP response. Behavioral and Brain Functions: BBF, 1(13). https://doi.org/10.1186/1744-9081-1-13
-Navajas, J., Ahmadi, M., & Quian Quiroga, R. (2013). Uncovering the mechanisms of conscious face perception: A single-trial study of the N170 responses. Journal of Neuroscience, 33(4), 1337–1343. https://doi.org/10.1523/jneurosci.1226-12.2013
-Olivares, E. I., Iglesias, J., Saavedra, C., Trujillo-Barreto, N. J., & Valdés-Sosa, M. (2015). Brain signals of face processing as revealed by event-related potentials. Behavioural Neurology, 2015, Article 514361. https://doi.org/10.1155/2015/514361
-Rossion, B. (2014). Understanding face perception by means of human electrophysiology. Trends in Cognitive Sciences, 18(6), 310–318. https://doi.org/10.1016/j.tics.2014.02.013
-Yildirim-Keles, F. Z., Stacchi, L., & Caldara, R. (2025). Cross-validating the electrophysiological markers of early face categorization. Eneuro, 12(1), Article e031724. https://doi.org/10.1523/eneuro.0317-24.2024
-Taubert, J., Wardle, S. G., & Ungerleider, L. G. (2020). What does a “face cell” want?” Progress in Neurobiology, 195, 101880. PubMed Central. https://doi.org/10.1016/j.pneurobio.2020.101880
-Albonico, A., & Barton, J. (2019). Progress in perceptual research: The case of prosopagnosia. F1000Research, 8(1), 765. https://doi.org/10.12688/f1000research.18492.1
-ohnston, P., Molyneux, R., & Young, A. W. (2015). The N170 observed “in the wild”: Robust event-related potentials to faces in cluttered dynamic visual scenes. Social Cognitive and Affective Neuroscience, 10(7), 938–944. PubMed Central. https://doi.org/10.1093/scan/nsu136
-Rossion, B., & Caharel, S. (2011). ERP evidence for the speed of face categorization in the human brain: Disentangling the contribution of low-level visual cues from face perception. Vision Research, 51(12), 1297–1311. PubMed. https://doi.org/10.1016/j.visres.2011.04.003
-Biosemi EEG ECG EMG BSPM neuro amplifier electrodes. (n.d.). Www.Biosemi.Com. Retrieved October 20, 2026, from https://www.biosemi.com/
+Dering, B., Hoshino, N., & Theirry, G. (2012). N170 modulation is expertise-driven: evidence from word-inversion effects in speakers of different lan-guages. In: Ojima, S., Otsu, Y., Connolly, J., & Thierry, G. (eds.), Future trends in the biology of language. Tokyo: Keiogijukudaigakushuppankai
+Eimer, M. (2011). The Face-Sensitivity of the N170 Component. Frontiers in Human Neuroscience, 5. https://doi.org/10.3389/fnhum.2011.00119
+Eimer, M., Gosling, A., Nicholas, S., & Kiss, M. (2011). The N170 component and its links to configural face processing: A rapid neural adaptation study. Brain Research, 1376, 76–87. https://doi.org/10.1016/j.brainres.2010.12.046
+Ganis, G., Smith, D., & Schendan, H.E. (2012). The N170, not the P1, indexes the earliest time for categorical perception of faces, regardless of interstimulus variance. Neuroimage, 62, 1563-1574.
+Gao, C., Conte, S., Richards, J. E., Xie, W., & Hanayik, T. (2019). The neural sources of N170: Understanding timing of activation in face‐selective areas. Psychophysiology, 56(6), e13336. https://doi.org/10.1111/psyp.13336
+Herzberg, L., Schräder, J., Jo, H.-G., Habel, U., & Wagels, L. (2025). Identifying P100 and N170 as electrophysiological markers for conscious and unconscious processing of emotional facial expressions. Frontiers in Behavioral Neuroscience, 18. https://doi.org/10.3389/fnbeh.2024.1464888
+Johnston, P., Molyneux, R., & Young, A. W. (2015a). The N170 observed ‘in the wild’: Robust event-related potentials to faces in cluttered dynamic visual scenes. Social Cognitive and Affective Neuroscience, 10(7), 938–944. https://doi.org/10.1093/scan/nsu136
+Johnston, P., Molyneux, R., & Young, A. W. (2015b). The N170 observed ‘in the wild’: Robust event-related potentials to faces in cluttered dynamic visual scenes. Social Cognitive and Affective Neuroscience, 10(7), 938–944. https://doi.org/10.1093/scan/nsu136
 Kappenman, E. S., Farrens, J. L., Zhang, W., Stewart, A. X., & Luck, S. J. (2021). ERP CORE: An open resource for human event-related potential research. NeuroImage, 225, 117465. https://doi.org/10.1016/j.neuroimage.2020.117465
+Liu, T., Mu, S., He, H., Zhang, L., Fan, C., Ren, J., Zhang, M., He, W., & Luo, W. (2016). The N170 component is sensitive to face-like stimuli: A study of Chinese peking opera makeup. Cognitive Neurodynamics, 10(6), 535–541. https://doi.org/10.1007/s11571-016-9399-8
+Maurer, U., Brandeis, D., & McCandliss, B. D. (2005). Fast, visual specialization for reading in English revealed by the topography of the N170 ERP response. Behavioral and Brain Functions, 1(1), 13. https://doi.org/10.1186/1744-9081-1-13
+Navajas, J., Ahmadi, M., & Quian Quiroga, R. (2013). Uncovering the Mechanisms of Conscious Face Perception: A Single-Trial Study of the N170 Responses. The Journal of Neuroscience, 33(4), 1337–1343. https://doi.org/10.1523/JNEUROSCI.1226-12.2013
+Olivares, E. I., Iglesias, J., Saavedra, C., Trujillo-Barreto, N. J., & Valdés-Sosa, M. (2015). Brain Signals of Face Processing as Revealed by Event-Related Potentials. Behavioural Neurology, 2015, 1–16. https://doi.org/10.1155/2015/514361
+Rossion, B., & Caharel, S. (2011). ERP evidence for the speed of face categorization in the human brain: Disentangling the contribution of low-level visual cues from face perception. Vision Research, 51(12), 1297–1311. https://doi.org/10.1016/j.visres.2011.04.003
+Rossion, B. (2014). Understanding face perception by means of human electrophysiology. Trends in Cognitive Sciences, 18(6), 310–318. https://doi.org/10.1016/j.tics.2014.02.013
+Sagehorn, M., Johnsdorf, M., Kisker, J., Sylvester, S., Gruber, T., & Schöne, B. (2023). Real-life relevant face perception is not captured by the N170 but reflected in later potentials: A comparison of 2D and virtual reality stimuli. Frontiers in Psychology, 14, 1050892. https://doi.org/10.3389/fpsyg.2023.1050892
+Taubert, J., Wardle, S. G., & Ungerleider, L. G. (2020). What does a “face cell” want?’. Progress in Neurobiology, 195, 101880. https://doi.org/10.1016/j.pneurobio.2020.101880
+Yildirim-Keles, F. Z., Stacchi, L., & Caldara, R. (2025). Cross-Validating the Electrophysiological Markers of Early Face Categorization. Eneuro, 12(1), ENEURO.0317-24.2024. https://doi.org/10.1523/ENEURO.0317-24.2024
 
 I declare AI was not used for this assignment
