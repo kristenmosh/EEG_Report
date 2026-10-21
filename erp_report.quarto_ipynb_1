@@ -1,0 +1,332 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"N170 Analysis\"\n",
+        "author: \"Kristen Mosheev\"\n",
+        "date: today\n",
+        "format: \n",
+        "    html:\n",
+        "        embed-resources: true\n",
+        "        toc: true\n",
+        "        toc-depth: 3\n",
+        "        code-fold: true\n",
+        "        theme: flatly # adapt this to a theme of your choice if you'd like\n",
+        "execute:\n",
+        "    warning: false\n",
+        "    message: false\n",
+        "bibliography: \"erp_report.bib\"\n",
+        "---\n",
+        "\n",
+        "## Setup"
+      ],
+      "id": "1539d30f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Specify the required imports for your analysis\n",
+        "from pathlib import Path\n",
+        "\n",
+        "from mini_mne import SimpleRaw, SimpleEpoch, grand_average, plot_evokeds\n",
+        "\n",
+        "# Note how we can import a custom preprocessing function from a local script\n",
+        "from scripts.preproc import preprocess"
+      ],
+      "id": "902f6e86",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Specify the required paths for your analysis\n",
+        "# Note that we now include a folder for saving preprocessed data\n",
+        "RAW_PATH = Path(\"data/raw\")\n",
+        "PROCESSED_PATH = Path(\"data/processed\")"
+      ],
+      "id": "675ea35d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Introduction\n",
+        "\n",
+        "### N170 Component Characteristics\n",
+        "The polarity of the N170 ERP is negative, displaying a voltage peak at a latency of approximately 170ms post-stimulus onset (@Gao_et_al.2019). The most topographically active areas when the N170 is elicited are the bilateral occipito-temporal areas, specifically, electrodes P7, P8, PO7 and PO8 from a standard 10-20 system (@Johnston_et_al.2015;@Navajas_et_al.2013)\n",
+        "\n",
+        "### Background Research on the N170 Component\n",
+        "#### Initial Observations of the N170\n",
+        "The N170 was first officially observed by @Bentin_et_al.1996, utilising electroencephalography (EEG) to study facial perception. @Bentin_et_al.1996 found that visual stimuli of an upright human face elicited an N170 at approximately 172ms, with prominence over the posterior temporal scalp, particularly over the right hemisphere. The prominence over the right hemisphere may now be understood through the fusiform face area, which is often right-lateralized and is believed to undertake a crucial role in gestalt facial processing (@Kanwisher_et_al.1997). @Bentin_et_al.1996 found that distorted human faces evoked the same amplitude and latency as normal human faces, while inverted human faces displayed a similar amplitude to upright human faces, albeit, with a slightly delayed N170 component. However, @Bentin_et_al.1996 found that the N170 was not elicited by animal faces, human hands or inanimate objects, positing that the N170 may reflect the brain’s recognition of human faces. @Bentin_et_al.1996 further posit the N170's reflection of human facial features, particularly of the eyes,as sole depiction of eyes produced a greater amplitude for the N170 than that of a whole, intact, upright human face (@Bentin_et_al.1996). While human facial features such as the nose and mouth still elicited an N170, the amplitude of such features was less than that of an intact, upright human face (@Bentin_et_al.1996).\n",
+        "\n",
+        "Despite the first formal publication of the N170 from @Bentin_et_al.1996, @Bötzel_&_Grüsser.1989 were the first to informally observe  findings related to facial perception through the component now known as the Vertex Positive Potential (VPP). @Bötzel_&_Grüsser.1989 observed the VPP after showing participants visual stimuli of human faces amongst visual controls of chairs and trees. The VPP occurred at electrode Cz between 150ms to 200ms post-stimulus onset of the human faces. Following this observation, @Bötzel_et_al.1995 utilised a larger number of electrodes and found that the VPP was a direct three-dimensional correspondent to the N170, found at the occipito-temporal sites. Finally, @Bötzel_et_al.1995 undertook advanced computer analysis of dipoles, finding that the N170 electrical signals originated deep in the temporal cortex, crossing the visual cortex and centre of the scalp. Prior to @Bötzel_&_Grüsser.1989 use of EEG to understand human facial processing, researchers largely relied on invasive animal studies and research with prosopagnosia patients (@Taubert_et_al.2020; @Albonico_&_Barton.2019). Thus, the works of @Bötzel_&_Grüsser.1989 serve as a pivotal methodological advance through improving non-invasive techniques and the populations studies can be undertaken with to increase understanding of human facial processing.\n",
+        "\n",
+        "#### Conditions where the N170 Component is elicited\n",
+        "The classic visual stimuli utilised to elicit the N170 component is human facial stimuli (@Eimer.2011). Inverted human faces similarly elicit the N170 component, however, with an increased amplitude and delayed deflection comparatively (@Civile_et_al.2018). Varying human facial expression, such as fear, have been seen to inflate the N170  amplitude (@Blau_et_al.2007). Human eyes are a salient visual stimuli of the N170, eliciting a greater amplitude than that of a whole human face (@Bentin_et_al.1996). However, visual stimuli of the nose and lips display a delay in the N170 and decrease in amplitude compared to visual stimuli of a whole human face (@Bentin_et_al.1996). While the N170 ERP component is particularly sensitive to facial visual stimuli, it can also be elicited by written words (@Eimer.2011; @Maurer_et_al.2005). \n",
+        "\n",
+        "#### Functional Significance of the N170 Component\n",
+        " The N170 is thought to represent visual facial detection and encoding in a gestalt manner (@Olivares_et_al.2015). \n",
+        "\n",
+        "Furthermore, the N170 can be applied clinically as a quantitative biomarker for autistic spectrum disorder, schizophrenia and developmental prosopagnosia, as such conditions display an uncharacteristic N170 component (@Johnston_et_al.2015).\n",
+        "\n",
+        "### Controversies regarding the N170\n",
+        "Due to the relatively new use of EEG for facial perception studies  (@Bentin_et_al.1996), there is some controvery over what the N170 truly reflects. A topic that is strongly debated at current is whether the N170 reflects face-specificty. @Rossion_et_al.2000 propose that there may be face-specific processes in areas of the brain, such as the fusiform gyrus, while a greater number of works posit that such areas may better reflect stimuli processing from an expert of perception within this field (@Carmel_&_Bentin.2002; @Dering_et_al.2012). However, @Ganis_et_al.2012 promote a sensible view of the reflections of the N170: this ERP component responds favourably to face and face-like stimuli compared to other categories of stimuli such as objects, and scrambled pictures. \n",
+        "\n",
+        "@Sagehorn_et_al..2023 presents another interesting debate regarding the N170, finding that the N170 lost discrimination power of faces when participants viewed visual stimuli through virtual reality (VR), as opposed to the traditional 2D display of the visual stimuli. Such conclusions present the possibility that results of the N170 from 2D visual representations may not applicable to VR visual stimuli, and further, applications to processing of real-life faces.\n",
+        "\n",
+        "## Methods\n",
+        "\n",
+        "### Participants\n",
+        "Initially, a total of 40 participants were recruited for the current study by @Kappenman_et_al.2021. This sample contained 25 females and 15 males, with an average age of 21.5 years and a standard deviation of 2.87 years. The range of ages was 18 to 30 and 38 participants were right handed. All participants are neurotypical. However, results from three participants were excluded due to artifact rejection. Therefore, results were analysed from 37 participants. The new sample contained 24 females and 13 males, with an average age of 21.5 years and a standard deviation of 2.96 years. The age range of participants was 18 to 30 years and 35 participants were right-handed. Inclusion criteria included native English speaking competence, normal colour perception, normal or corrected-to-normal vision and no history of a neurological disease or injury. Each participant provided a self-report regarding the inclusion criteria."
+      ],
+      "id": "9328a72a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "EXCLUDE = [\"001\", \"005\", \"016\"]"
+      ],
+      "id": "da0e2769",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Procedure\n",
+        "\n",
+        "A face perception task was undertaken with participants to elicit the N170 component. The incorporated visual stimuli of faces, cars, scrambled faces and scrambled cars were obtained from @Rossion_&_Caharel.2011 and contained 40 exemplar visual stimuli in each category. For each trial, one stimuli from the four aforementioned visual categories was randomly displayed in the centre of a screen for 300ms. The visual angle of every image was 3.32° x 3.78°, while the inter-stimulus-interval was 1100-1300ms and displayed a fixation point. Clothing, hair and the background were all excluded from the face stimuli, while a background was omitted for the car stimuli. The scrambled faces and cars were phase-randomized based on the facial and car visual stimuli. Participants wre provided two button alternatives which were used to indicate whether the participant was observing an object (face or car) or a texture (scrambled face or scrambled car) for each trial. A total of 320 trials were undertaken for each participant, where the 40 visual stimuli from each category were displayed twice, forming a total of 80 trials for each stimulus category. Each stimuli was randomly presented through a shuffled-sequence, however, each exemplar was only presented once during the first half of the experiment and once during the second half of the experiment. The experiment was conducted in segments of 40 trials. \n",
+        "\n",
+        "### EEG recording\n",
+        "\n",
+        "EEG recordings were conducted with a BioSemi ActiveTwo recording system with active electrodes and the amplifier built into the hardware (@BioSemi.2001). An elastic cap was utilised, with 30 attached scalp electrodes that were positioned relative to the 10/20 system:\n",
+        "FP1, F3, F7, FC3, C3, C5, P3, P7, P9, PO7, PO3, O1, Oz, Pz, CPz, FP2, Fz, F4, F8, FC4, FCz, Cz, C4, C6, P4, P8, P10, PO8, PO4, O2. The common mode sense (CMS) was positioned at PO1, while the driven right leg (DRL) was positioned at PO2. The horizontal electrooculogram (HEOG) was positioned with electrodes laterla to the external canthus of each eye, while the vertical electrooculogram was positioned with an electrode below the right eye. A low pass filter was implemented utilising a fifth order sinc filter and a half power cutoff at 204.8Hz. This frequency was then digitized with 24 bits resolution as 1024Hz.\n",
+        "\n",
+        "### Analysis parameters\n",
+        "\n",
+        "The N170 was stimulus-locked to the visual stimuli. The epochs were taken from -200ms to 800ms around stimulus onset. The baseline period was measured from -200ms to 0ms. The electrode site for the N170 was PO8. All data and procedural actions were obtained from the ERP CORE resource (@Kappenman_et_al.2021) under a Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). \n",
+        "\n",
+        "#### Preprocessing parameters"
+      ],
+      "id": "a8748258"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "FILTER_SETTINGS = {\n",
+        "    \"low_cutoff\": 0.1,\n",
+        "    \"high_cutoff\": 30.0\n",
+        "}\n",
+        "\n",
+        "# This setting re-references to averaged mastoids (P9/P10 as proxy) \n",
+        "# To use an average reference, replace [\"P9\", \"P10\"] with None \n",
+        "REFERENCE = None"
+      ],
+      "id": "1d0a126f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "#### Epoching parameters"
+      ],
+      "id": "3e970887"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "TMIN = -0.2 # epoch start relative to critical event\n",
+        "TMAX = 0.8  # epoch end relative to critical event\n",
+        "\n",
+        "BASELINE = (-0.2,0) # baseline interval\n",
+        "\n",
+        "# critical conditions for averaging and epoching\n",
+        "CONDITIONS = [\"stimulus/face\", \"stimulus/car\", \"stimulus/scrambled_face\", \"stimulus/scrambled_car\"]\n",
+        "\n",
+        "REJECT = {\n",
+        "    \"eeg\": 150e-6,\n",
+        "    \"eog\": 250e-6\n",
+        "}"
+      ],
+      "id": "74295649",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Data analysis\n",
+        "\n",
+        "### Preprocessing"
+      ],
+      "id": "d6535e49"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: true # set this to false if you don't want preprocessing to recompute\n",
+        "#| output: false # this suppresses any output\n",
+        "\n",
+        "for raw_file in RAW_PATH.glob(\"*_raw.fif.gz\"):\n",
+        "\n",
+        "    # extract subject number\n",
+        "    subj_ID = raw_file.stem.split(\"_\")[0]\n",
+        "\n",
+        "    # read in raw file \n",
+        "    raw = SimpleRaw(raw_file)\n",
+        "\n",
+        "    # preprocess raw file\n",
+        "    # note how we draw on a custom preprocessing function here\n",
+        "    processed = preprocess(raw, \n",
+        "                            reref_params = REFERENCE, \n",
+        "                            filter_low_cutoff = FILTER_SETTINGS[\"low_cutoff\"], \n",
+        "                            filter_high_cutoff = FILTER_SETTINGS[\"high_cutoff\"])\n",
+        "    \n",
+        "    processed.save(PROCESSED_PATH / f\"{subj_ID}_raw.fif.gz\", overwrite = True)\n"
+      ],
+      "id": "cf524e25",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Epoching and averaging"
+      ],
+      "id": "c048ed6b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| output: false\n",
+        "\n",
+        "# initialise empty dictionary to hold single-subject averages\n",
+        "ss_avs = {}\n",
+        "\n",
+        "for cond in CONDITIONS:\n",
+        "    ss_avs[cond] = []\n",
+        "\n",
+        "for processed_file in PROCESSED_PATH.glob(\"*_raw.fif.gz\"):\n",
+        "\n",
+        "    subj_ID = processed_file.stem.split(\"_\")[0]\n",
+        "    print(f\"processing participant {subj_ID}\")\n",
+        "\n",
+        "    if subj_ID in EXCLUDE:\n",
+        "        continue\n",
+        "    \n",
+        "    # read in preprocessed file\n",
+        "    processed = SimpleRaw(processed_file)\n",
+        "\n",
+        "    # extract events\n",
+        "    events, event_id = processed.get_events()\n",
+        "\n",
+        "    # epoch data\n",
+        "    epochs = SimpleEpoch(processed, events, event_id, tmin = TMIN, tmax = TMAX, baseline = BASELINE, reject = REJECT)\n",
+        "\n",
+        "    # subset epochs and average by condition \n",
+        "    for cond in CONDITIONS:\n",
+        "        av = epochs[cond].average()\n",
+        "        ss_avs[cond].append(av)"
+      ],
+      "id": "189e8e7a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Grand average"
+      ],
+      "id": "f6b71740"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| output: false\n",
+        "\n",
+        "# create an empty dict to hold our grand averages\n",
+        "grand_avs = {}\n",
+        "\n",
+        "for cond in CONDITIONS:\n",
+        "    grand = grand_average(ss_avs[cond])\n",
+        "    grand_avs[cond] = grand"
+      ],
+      "id": "89ab90b6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Results\n",
+        "\n",
+        "### Grand average: expected effect"
+      ],
+      "id": "861ed2e7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "selected_electrode = \"PO8\"\n",
+        "plot_title = \"Grand average for N170: Faces versus Cars versus Scrambled Faces versus Scrambled Cars\"\n",
+        "analysis_window_start = 0.136\n",
+        "analysis_window_end = 0.176\n",
+        "\n",
+        "plot_evokeds(grand_avs, picks = selected_electrode, invert_y = True, title = plot_title, vlines = [analysis_window_start, analysis_window_end])\n"
+      ],
+      "id": "023269ca",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Discussion and reflection\n",
+        "\n",
+        "The expected experimental effects for the N170 grand average are observed. Each condition displays a P100 situated approximately around the 100ms interval, reflecting initial visual processing of each stimuli category (@Herzberg_et_al.2025). The N170 is observed with a shorter latency and increased amplitude for the facial condition compared to the car condition. The scrambled face and scrambled car stimuli depict similar amplitudes at approx 170ms, and do not reach closely to the amplitude of the unscrambled visual conditions. This could be due to the structural integrity of the concepts being destroyed through phase-scrambling, wherein, face-sensitive neurons do not fire at the same time, decreasing the observed amplitude (@Liu_et_al.2016). \n",
+        "\n",
+        "The N170 component within the current study was similar to the grand average observed in @Kappenman_et_al.2021. Both N170 components for the facial condition occur at approximately 170ms post-stimulus onset. However, the grand average from @Kappenman_et_al.2021 omits the scrambled face and scrambled car conditions, whereas, the  current grand average does not. We have included the scrambled conditions to showcase the difference between clear and scrambled images in the evoked response. Furthermore, @Kappenman_et_al.2021 plot negativity downwards on the y-axis, as opposed to the current grand average that plots negativity upwards on the y-axis, contributing to inverted wave forms. Furthermore, the y-axis for Kappenman et al's grand average ranges from -10uV to +15uV, while the y-axis of the current grand average ranges from -10uV to +10uV. The  larger range for the y-axis in @Kappenman_et_al.2021, the grand average smooths out sudden deflections, whereas, the current study's grand average displays smaller deflections in the waveform.  \n",
+        "\n",
+        "By applying the analysis process to the N170 dataset, I feel that I was given a chance to try to understand and integrate the information specific to the N170 dataset on my own. Making mistakes ultimately ended up being the best process for my learning, as I may make a mistake, but getting to go through the process of where I went wrong with Ina really helped me to understand why different parameters and processes practically matter in running the code. I feel that I understood the pipeline process to a greater degree by undertaking a new dataset, as I could flow through each step to understand why certain steps were undertaken before others, and importance of each step to the overall outcome of producing the desired results.\n",
+        "\n",
+        "## References\n",
+        "\n",
+        "I declare AI was not used for this assignment"
+      ],
+      "id": "6b21dc0d"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\user\\mne-python\\1.12.1_0\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
