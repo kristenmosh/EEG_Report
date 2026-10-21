@@ -213,6 +213,4 @@ The N170 component within the current study was similar to the grand average obs
 
 By applying the analysis process to the N170 dataset, I feel that I was given a chance to try to understand and integrate the information specific to the N170 dataset on my own. Making mistakes ultimately ended up being the best process for my learning, as I may make a mistake, but getting to go through the process of where I went wrong with Ina really helped me to understand why different parameters and processes practically matter in running the code. I feel that I understood the pipeline process to a greater degree by undertaking a new dataset, as I could flow through each step to understand why certain steps were undertaken before others, and importance of each step to the overall outcome of producing the desired results.
 
-## References
-
 I declare AI was not used for this assignment
